@@ -1,0 +1,35 @@
+result = xml.objectify(file.read("waf.xml"))
+
+tag("Web Application Firewall")
+
+result/baseHost = parameter(
+	name: "baseHost",
+	category: "Basic",
+	title: null,
+	description: "The base host of this WAF.",
+	type: null,
+	encrypted: false,
+	optional: true,
+	raw: result/baseHost)/current
+	
+result/server = parameter(
+	name: "server",
+	category: "Basic",
+	title: null,
+	description: "The server this WAF is active on",
+	type: "artifact",
+	encrypted: false,
+	optional: true,
+	raw: result/server)/current
+
+result/redirectServer = parameter(
+	name: "redirectServer",
+	category: "Basic",
+	title: null,
+	description: "The redirect server this WAF is active on",
+	type: "artifact",
+	encrypted: false,
+	optional: true,
+	raw: result/redirectServer)/current
+	
+file.write("waf.xml", xml.stringify(result))
