@@ -2,6 +2,16 @@ result = xml.objectify(file.read("jdbcPool.xml"))
 
 tag("JDBC Pool")
 
+result/poolProxy = parameter(
+	name: "poolProxy",
+	category: "Database",
+	title: null,
+	description: "Any pool proxy you want to configure",
+	type: null,
+	encrypted: false,
+	optional: true,
+	raw: result/poolProxy)/current
+
 result/jdbcUrl = parameter(
 	name: "jdbcUrl",
 	category: "Database",
@@ -10,6 +20,7 @@ result/jdbcUrl = parameter(
 	type: null,
 	encrypted: false,
 	optional: false,
+	hide: "poolProxy != null",
 	raw: result/jdbcUrl)/current
 	
 result/driverClassName = parameter(
@@ -20,6 +31,7 @@ result/driverClassName = parameter(
 	type: null,
 	encrypted: false,
 	optional: false,
+	hide: "poolProxy != null",
 	raw: result/driverClassName)/current
 	
 result/dialect = parameter(
@@ -30,6 +42,7 @@ result/dialect = parameter(
 	type: null,
 	encrypted: false,
 	optional: true,
+	hide: "poolProxy != null",
 	raw: result/dialect)/current
 	
 result/username = parameter(
@@ -40,6 +53,7 @@ result/username = parameter(
 	type: null,
 	encrypted: false,
 	optional: true,
+	hide: "poolProxy != null",
 	raw: result/username)/current
 	
 result/password = parameter(
@@ -50,6 +64,7 @@ result/password = parameter(
 	type: "password",
 	encrypted: true,
 	optional: true,
+	hide: "poolProxy != null",
 	raw: result/password)/current
 	
 result/maximumPoolSize = parameter(
@@ -61,6 +76,7 @@ result/maximumPoolSize = parameter(
 	encrypted: false,
 	optional: true,
 	default: "10",
+	hide: "poolProxy != null",
 	raw: result/maximumPoolSize)/current
 
 result/minimumIdle = parameter(
@@ -71,6 +87,7 @@ result/minimumIdle = parameter(
 	type: "long",
 	encrypted: false,
 	optional: true,
+	hide: "poolProxy != null",
 	raw: result/minimumIdle)/current
 
 result/connectionTimeout = parameter(
@@ -81,6 +98,7 @@ result/connectionTimeout = parameter(
 	type: "long",
 	encrypted: false,
 	optional: true,
+	hide: "poolProxy != null",
 	raw: result/connectionTimeout)/current
 
 result/idleTimeout = parameter(
@@ -91,8 +109,8 @@ result/idleTimeout = parameter(
 	type: "long",
 	encrypted: false,
 	optional: true,
+	hide: "poolProxy != null",
 	raw: result/idleTimeout)/current
 	
-
 	
 file.write("jdbcPool.xml", xml.stringify(result))

@@ -22,6 +22,16 @@ result/aliases = split("[\s]*,[\s]*", parameter(
 	optional: true,
 	raw: join(", ", result/aliases))/current)
 
+result/redirectAliases = split("[\s]*,[\s]*", parameter(
+	name: "redirectAliases",
+	category: "Basic",
+	title: null,
+	description: "The redirect DNS names for this host",
+	type: null,
+	encrypted: false,
+	optional: true,
+	raw: join(", ", result/redirectAliases))/current)
+
 result/server = parameter(
 	name: "server",
 	category: "Basic",

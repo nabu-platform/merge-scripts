@@ -1,0 +1,44 @@
+result = xml.objectify(file.read("feature-set.xml"))
+
+tag("Feature Set")
+
+enabled = result/features
+if (enabled == null)
+	enabled = series.series()
+else if (typeof(enabled) ~ "(?s).*string.*")
+	enabled = series.series(enabled)
+
+disabled = result/disabled
+if (disabled == null)
+	disabled = series.series()
+else if (typeof(disabled) ~ "(?s).*string.*")
+	disabled = series.series(disabled)
+
+total = series.merge(enabled, disabled)
+
+# sort it alphabetically
+total = series.sort(series: total)
+
+resultEnabled = series()
+resultDisabled = series()
+
+for (single : total)
+	setting = parameter(
+		name: single,
+		category: "Features",
+		title: null,
+		description: null,
+		type: "boolean",
+		encrypted: false,
+		optional: true,
+		default: null,
+		raw: "" + (single ? enabled))/current
+	if (setting == true)
+		resultEnabled = series.merge(resultEnabled, single)
+	else
+		resultDisabled = series.merge(resultDisabled, single)
+
+result/features = resultEnabled
+result/disabled = resultDisabled
+
+file.write("feature-set.xml", xml.stringify(result))

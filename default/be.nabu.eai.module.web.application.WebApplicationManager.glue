@@ -5,7 +5,7 @@ tag("HTTP Web Application")
 result/virtualHost = parameter(
 	name: "virtualHost",
 	category: "Basic",
-	title: "artifact",
+	title: null,
 	description: "The virtual host the application is available on",
 	type: null,
 	encrypted: false,
@@ -26,8 +26,6 @@ file.write("webartifact.xml", xml.stringify(result))
 
 
 
-
-
 fragments = xml.objectify(file.read("fragments.xml"))
 
 for (part : fragments/parts)
@@ -35,19 +33,30 @@ for (part : fragments/parts)
 	if (definition != null)
 		keyValuePairs = derive(lambda(x, structure(key: x["@key"], value: x["$value"])), part/configuration/property)
 		object = propertiesToObject(definition, properties: unwrap(keyValuePairs))
-		parameters = parameters(definition, lambda(x, object[x]), part/environmentSpecific == true)
+		# we use the fully type name as a prefix, we assume the same type is only configured once (which is generally the case)
+		# we can't really use indexed access because the layout of the fragments might change
+		# we could generate a unique id per fragment and use that as an alternative but that is less readable
+		parameters = parameters(definition, lambda(x, object[string.substring(script.size(part/type) + 1, string: x)]), part/environmentSpecific == true, prefix: part/type)
 		
 		parsedDefinition = xml.objectify(definition)
 		
 		for (parameter : parameters)
+			localName = string.substring(script.size(part/type) + 1, string: parameter/name)
 			if (parameter/list)
-				object[/parameter/name] = split("[\s]*,[\s]*", parameter/current)
+				object[/localName] = split("[\s]*,[\s]*", parameter/current)
 			else
-				object[/parameter/name] = parameter/current
+				object[/localName] = parameter/current
 			#parameter/category = replace("^.*\\.([^.]+)$", "$1", part/type)
 			parameter/category = when(parsedDefinition["@comment"] != null, parsedDefinition["@comment"], part/type)
-		part/configuration/property = objectToProperties(object)
+			parameter/title = localName
+		
+		# this is actual key/value pairs
+		keyValuePairs = objectToProperties(object)
+		# we want to transform it into attribute "key" and a value
+		keyValuePairs = resolve(derive(lambda(x, structure(lambda("@key"): x["key"], lambda("$value"): x/value)), keyValuePairs))
+		part/configuration/property = keyValuePairs
 	else
 		echo("Could not find definition for: " + part/type)
 
 file.write("fragments.xml", xml.stringify(fragments))
+

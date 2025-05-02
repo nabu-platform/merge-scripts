@@ -46,6 +46,16 @@ result/conversationIdHeaderMapping = parameter(
 	optional: true,
 	raw: result/conversationIdHeaderMapping)/current
 
+result/redirectTo = parameter(
+	name: "redirectTo",
+	category: null,
+	title: null,
+	description: "Redirect all requests from this http server to another",
+	type: "string",
+	encrypted: false,
+	optional: true,
+	raw: result/redirectTo)/current
+
 result/proxied = parameter(
 	name: "proxied",
 	category: "Proxy",
@@ -55,6 +65,17 @@ result/proxied = parameter(
 	encrypted: false,
 	optional: false,
 	raw: result/proxied)/current
+	
+result/nabuProxy = parameter(
+	name: "nabuProxy",
+	category: "Proxy",
+	title: null,
+	description: "If the proxy is also running on Nabu, we can make some assumptions with regards to header mapping.",
+	type: "boolean",
+	encrypted: false,
+	optional: false,
+	show: "proxied == 'true'",
+	raw: result/nabuProxy)/current
 
 result/proxySecure = parameter(
 	name: "proxySecure",
@@ -109,8 +130,8 @@ result/maxSizePerRequest = parameter(
 	optional: true,
 	raw: result/maxSizePerRequest)/current
 
-result/ioSize = parameter(
-	name: "ioSize",
+result/ioPoolSize = parameter(
+	name: "ioPoolSize",
 	category: "Limits",
 	title: null,
 	description: "The amount of threads available for I/O",

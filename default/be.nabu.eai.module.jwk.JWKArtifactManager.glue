@@ -1,0 +1,16 @@
+result = xml.objectify(file.read("jwk.xml"))
+
+tag("JWK")
+tag("JWT")
+
+result/uris = split("[\s]*,[\s]*", parameter(
+	name: "uris",
+	category: "Basic",
+	title: null,
+	description: "The list of JWK JSON URIs (comma separated)",
+	type: null,
+	encrypted: false,
+	optional: true,
+	raw: join(", ", result/uris))/current)
+
+file.write("jwk.xml", xml.stringify(result))

@@ -5,7 +5,9 @@ if (definition == null)
 	abort()
 
 meta = xml.objectify(file.read("meta.xml"))
-result = xml.objectify(file.read("configuration.xml"))
+# does not detect arrays with a single element... which does not work well with dynamic array handling
+# result = xml.objectify(file.read("configuration.xml"))
+result = parseXmlWithDefinition(file.read("configuration.xml"), definition)
 
 parameters = parameters(definition, lambda(x, result[x]), meta/environmentSpecific == true)
 

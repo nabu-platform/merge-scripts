@@ -1,0 +1,36 @@
+result = xml.objectify(file.read("odata-client.xml"))
+
+tag("OData Client")
+
+result/endpoint = parameter(
+	name: "endpoint",
+	category: "Basic",
+	title: null,
+	description: "The endpoint to use",
+	type: null,
+	encrypted: false,
+	optional: true,
+	raw: result/endpoint)/current
+
+result/securityType = parameter(
+	name: "securityType",
+	category: "Security",
+	title: null,
+	description: "The security type to use. The available types depends on the environment.",
+	type: null,
+	encrypted: false,
+	optional: true,
+	raw: result/securityType)/current
+
+result/securityContext = parameter(
+	name: "securityContext",
+	category: "Security",
+	title: null,
+	description: "The security context to use. This is a fixed string that must match a configuration elsewhere.",
+	type: null,
+	encrypted: false,
+	optional: true,
+	raw: result/securityContext)/current
+
+file.write("odata-client.xml", xml.stringify(result))
+
