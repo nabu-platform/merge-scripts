@@ -140,6 +140,17 @@ result/apiHeaderKey = parameter(
 	show: "contains(security, 'apiKey') && apiHeaderName != null",
 	raw: result/apiHeaderKey)/current
 
+result/bearerToken = parameter(
+	name: "bearerToken",
+	category: "Security",
+	title: null,
+	description: "The bearer token",
+	type: null,
+	encrypted: false,
+	optional: true,
+	show: "contains(security, 'bearer')",
+	raw: result/bearerToken)/current
+
 result/supportGzip = parameter(
 	name: "supportGzip",
 	category: null,
